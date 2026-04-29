@@ -55,6 +55,10 @@
 var map = L.map('map').setView([48.85, 2.35], 9);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+// AJOUT DU CADRE NOIR (Limites IdF)
+var boundsIdF = [[48.12, 1.44], [49.24, 3.56]];
+L.rectangle(boundsIdF, {color: "#000000", weight: 2, fill: false, interactive: false}).addTo(map);
+
 var markers = [];
 var villesCoords = {};
 var cercleRayon = null;
@@ -139,16 +143,14 @@ fetch("data.csv")
                     let cp = row["CP"]?.trim();
                     let p = row["Produit"]?.trim() || row["Produit "]?.trim();
 
-                    // 1. Enrichissement Ville (Toujours fait si ville + coordonnées ville existent)
                     if (isValueValid(v)) {
                         villeSet.add(v);
                         if (!isNaN(latV)) villesCoords[normalize(v)] = [latV, lngV];
                     }
 
-                    // 2. SÉCURITÉ MARQUEURS : Uniquement si Fournisseur ET Coordonnées fournisseur existent
+                    // SÉCURITÉ MARQUEURS : Nom Fournisseur + Coordonnées obligatoires
                     if (!isValueValid(f) || isNaN(latF) || isNaN(lngF)) return;
 
-                    // 3. Enrichissement des autres listes (uniquement pour les vrais fournisseurs)
                     frsSet.add(f);
                     if (isValueValid(cp)) cpSet.add(cp);
                     if (isValueValid(p)) prodSet.add(p);
@@ -203,7 +205,7 @@ function ajouterLegendes() {
     var legendLeft = L.control({position: 'bottomleft'});
     legendLeft.onAdd = function() {
         var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `<b class="title">G2 : Fournitures / Matériel</b>`;
+        div.innerHTML = `<b class="title">G2 : Fournitures / Marquage / Balisage / Matériel</b>`;
         listeG2.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
         return div;
     };
@@ -212,7 +214,7 @@ function ajouterLegendes() {
     var legendRight = L.control({position: 'bottomright'});
     legendRight.onAdd = function() {
         var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `<b class="title">G1 : Engins & Recyclage</b>`;
+        div.innerHTML = `<b class="title">G1 : Engins grands / petits & Recyclage</b>`;
         listeG1.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
         return div;
     };
