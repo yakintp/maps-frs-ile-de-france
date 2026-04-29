@@ -154,19 +154,13 @@ fetch("data.csv")
                     if (isValueValid(p)) prodSet.add(p);
 
                     let color = codesCouleurs[f] || "blue";
-                    
-                    // --- MODIFICATION ICI ---
-                    // On récupère le contenu de la colonne combinée (Email + Tel)
-                    let infosContact = row["Contact"] || "—"; 
-
                     let popupContent = `<div style="line-height:1.6;">
                         <b>Fournisseur :</b> ${f}<br>
                         <b>Adresse :</b> ${row["adresse complete"] || ""}<br>
                         <b>Ville :</b> ${v} (${cp})<br>
                         <b>Produit :</b> ${p}<br>
-                        <b>Email / Tel :</b> ${infosContact}
+                        <b>Email :</b> <a href="mailto:${row["Email"]}">${row["Email"] || ""}</a>
                     </div>`;
-                    // -------------------------
 
                     let m = L.marker([latF, lngF], { icon: getIcon(color) }).bindPopup(popupContent);
                     m.data = { f, v, cp, p, lat: latF, lng: lngF };
