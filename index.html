@@ -63,7 +63,7 @@ var markers = [];
 var villesCoords = {};
 var cercleRayon = null;
 
-// Palette diversifiée
+// Palette diversifiée avec ajouts Clim plus et LARIVIERE
 var codesCouleurs = {
     "ATPL CASELAS": "blue", "BSM": "red", "Bouvelot TP": "green", 
     "CAUPAMAT CADENZ": "violet", "CHEUTIN": "orange", "COLBER": "black",
@@ -73,7 +73,8 @@ var codesCouleurs = {
     "pum": "black", "Raboni": "green", "RFM": "violet",
     "SODEXTRA": "black", "SNB": "orange", "SOL 78": "grey",
     "SPME": "blue", "SCIABBARRASI RENT": "violet", "Tersen": "yellow",
-    "UTD": "green", "VIACOV": "red", "YPREMA": "black", "Cemex": "grey"
+    "UTD": "green", "VIACOV": "red", "YPREMA": "black", "Cemex": "grey",
+    "Clim plus": "orange", "LARIVIERE": "blue"
 };
 
 var logosMap = {
@@ -95,7 +96,9 @@ var logosMap = {
     "SCIABBARRASI RENT": "SCIABBARRASI RENT.png",
     "IDF MARQUAGE": "IDF MARQUAGE.jpg",
     "EUROPIERRE": "EUROPIERRE.jpg",
-    "ATPL CASELAS": "ATPL CASELAS .png"
+    "ATPL CASELAS": "ATPL CASELAS .png",
+    "Clim plus": "CLIM_PLUS.png", // À vérifier si vous avez le fichier
+    "LARIVIERE": "LARIVIERE.png"   // À vérifier si vous avez le fichier
 };
 
 function isValueValid(val) {
@@ -189,7 +192,8 @@ function remplirSelect(id, set, label) {
 }
 
 function ajouterLegendes() {
-    var listeG2 = ["Point P", "Raboni", "CAUPAMAT CADENZ", "Tersen", "pum", "YPREMA", "Fransbonhomme", "SODEXTRA", "SPME", "Bouvelot TP", "SNB", "EVA INDUSTRIES", "LM DISTRIBUTION", "IDF MARQUAGE", "EUROPIERRE"];
+    // AJOUT DE CLIM PLUS ET LARIVIERE DANS CETTE LISTE
+    var listeG2 = ["Point P", "Raboni", "CAUPAMAT CADENZ", "Tersen", "pum", "YPREMA", "Fransbonhomme", "SODEXTRA", "SPME", "Bouvelot TP", "SNB", "EVA INDUSTRIES", "LM DISTRIBUTION", "IDF MARQUAGE", "EUROPIERRE", "Clim plus", "LARIVIERE"];
     var listeG1 = ["Loxam", "Cemex", "BSM", "COLBER", "SOL 78", "VIACOV", "CHEUTIN", "GO POMPE", "EVO LOCATION", "UTD", "SCIABBARRASI RENT", "RFM", "ATPL CASELAS"];
     
     function createLegendItem(f) {
