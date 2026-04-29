@@ -227,10 +227,10 @@ Cemex	Cem	Cemex Port de Tolbiac	75000	Paris	48,8534951	2,3483915	Île-de-France	
 Cemex	Cem	Cemex Port d’Ivry	94000	Ivry-sur-Seine	48,8122302	2,3872525	Île-de-France	France	3 Quai Marcel Boyer, 94200 Ivry-sur-Seine, France	48.82487	2.389281	—	Beton
 Cemex	Cem	Cemex Port de Bercy	75000	Paris	48,8534951	2,3483915	Île-de-France	France	1 quai de Bercy, 75012 Paris, France	48.83158659	2.384735682	—	Beton
 Cemex	Cem	Cemex Unite de production beton de Gennevilliers	92000	Gennevilliers	48,9254221	2,2940122	Île-de-France	France	5 Route annexe de la Seine, 92230 Gennevilliers, France	48.94223	2.292504	—	Beton
-CAUPAMAT CADENZ	CAUP	Caddenz Palissades Orly	94000	ORLY	48,7431683	2,402391	Île-de-France	France	40 Rue du Kéfir, 94310 Orly	48.7490	2.3920	—	Marquage /Balisage 
-CAUPAMAT CADENZ	CAUP	Caddenz Paris Nord	92000	GENNEVILLIERS	48,9254221	2,2940122	Île-de-France	France	114 Avenue Laurent Cély, 92230 Gennevilliers	48.9180	2.3070	—	Marquage /Balisage 
-CAUPAMAT CADENZ	CAUP	Caddenz Paris Est	77000	CROISSY-BEAUBOURG	48,8278734	2,6584023	Île-de-France	France	25 Allée Léon Jouhaux, 77183 Croissy-Beaubourg	48.8290	2.6600	—	Marquage /Balisage 
-CAUPAMAT CADENZ	CAUP	Caddenz Paris Sud	91000	WISSOUS 	48,7316381	2,3268669	Île-de-France	France	27 Avenue Ampère, 91320 Wissous	48.7340	2.3290	—	Marquage /Balisage 
+CAUPAMAT CADDENZ	CAUP	Caddenz Palissades Orly	94000	ORLY	48,7431683	2,402391	Île-de-France	France	40 Rue du Kéfir, 94310 Orly	48.7490	2.3920	—	Marquage /Balisage 
+CAUPAMAT CADDENZ	CAUP	Caddenz Paris Nord	92000	GENNEVILLIERS	48,9254221	2,2940122	Île-de-France	France	114 Avenue Laurent Cély, 92230 Gennevilliers	48.9180	2.3070	—	Marquage /Balisage 
+CAUPAMAT CADDENZ	CAUP	Caddenz Paris Est	77000	CROISSY-BEAUBOURG	48,8278734	2,6584023	Île-de-France	France	25 Allée Léon Jouhaux, 77183 Croissy-Beaubourg	48.8290	2.6600	—	Marquage /Balisage 
+CAUPAMAT CADDENZ	CAUP	Caddenz Paris Sud	91000	WISSOUS 	48,7316381	2,3268669	Île-de-France	France	27 Avenue Ampère, 91320 Wissous	48.7340	2.3290	—	Marquage /Balisage 
 Tersen	Ter	Tersen etablissement Cosson	95000	Louvres	49,0449139	2,5096751	Île-de-France	France	9 Avenue du Beaumontoir, 95380 Louvres	49.0450	2.5070	environnement.louvres@tersenenv.com / 01 30 29 02 00	Materiel blanc 
 Tersen	Ter	Tersen etablissement Picheta	95000	 Pierrelaye	49,0232238	2,1557343	Île-de-France	France	13 Route de Conflans, 95480 Pierrelaye	49.0200	2.1600	environnement.pierrelaye@tersenenv.com	Materiel blanc 
 Tersen	Ter	Tersen 	91000	 Marcoussis	48,6559966	2,2035058	Île-de-France	France	CD35 – 10 Route de Montlhéry, 91460 Marcoussis	48.6420	2.2310	—	Materiel blanc 
@@ -338,14 +338,14 @@ LARIVIERE	LA	LARIVIERE PANTIN	93000	Pantin	48,8956	2,4017	Île-de-France	France	
 LARIVIERE	LA	LARIVIERE CHELLES	77000	Chelles	48,8811	2,582	Île-de-France	France	54 rue Belle Île, 77507 Chelles	48.8811	2.5820	—	Fournitures
 LARIVIERE	LA	LARIVIERE MANTES LA JOLIE	78000	Épône	48,9543	1,8119	Île-de-France	France	ZA de la Couronne des Prés, Avenue de la Mauldre, 78680 Epône	48.9543	1.8119	—	Fournitures
 LARIVIERE	LA	LARIVIERE BEAUCHAMP	95000	Beauchamp	49,0167	2,2	Île-de-France	France	269 Chemin Jules César, 95250 Beauchamp	49.0167	2.2000	—	Fournitures
-Clim plus	clim+	PANTIN CLIM+	93000	Pantin	48,8956	2,4017	Île-de-France	France	110 BIS AV DU GENERAL LECLERCHALLE DE PANTIN,93500 PANTIN	48.8992	2.4092	—	clim et chauff
-Clim plus	clim+	CORBEIL CLIM+	91000	CORBEIL-ESSONNES	48,6137734	2,4818087	Île-de-France	France	RUE FERNAND RAYNAUD,91100 CORBEIL-ESSONNES	48.6077	2.4685	—	clim et chauff
-Clim plus	clim+	LA QUEUE EN BRIE CLIM+	94000	LA QUEUE EN BRIE	48,78639	2,57889	Île-de-France	France	20 AV DU GENERAL DE GAULLE,94510 LA QUEUE EN BRIE	48.7889	2.5768	—	clim et chauff
+Clim plus	clim+	PANTIN CLIM+	93000	Pantin	48,8956	2,4017	Île-de-France	France	110 BIS AV DU GENERAL LECLERCHALLE DE PANTIN,93500 PANTIN	48.8992	2.4092	—	Fournitures
+Clim plus	clim+	CORBEIL CLIM+	91000	CORBEIL-ESSONNES	48,6137734	2,4818087	Île-de-France	France	RUE FERNAND RAYNAUD,91100 CORBEIL-ESSONNES	48.6077	2.4685	—	Fournitures
+Clim plus	clim+	LA QUEUE EN BRIE CLIM+	94000	LA QUEUE EN BRIE	48,78639	2,57889	Île-de-France	France	20 AV DU GENERAL DE GAULLE,94510 LA QUEUE EN BRIE	48.7889	2.5768	—	Fournitures
 Clim plus	clim+	MAISONS-ALFORT CLIM+					Île-de-France	France				—	clim et chauff
-Clim plus	clim+	VILLENEUVE CLIM+	92000	Villeneuve-la-Garenne	48,93472	2,32861	Île-de-France	France	4 Rue de la Litte, 92390 Villeneuve-la-Garenne	48.9407	2.3156	—	clim et chauff
-Clim plus	clim+	NANTERRE CLIM+	92000	Nanterre	48,89056	2,20889	Île-de-France	France	16 Avenue des Guilleraies, 92000 Nanterre	48.9053	2.2109	—	clim et chauff
-Clim plus	clim+	AULNAY SOUS BOIS CLIM+	93000	AULNAY SOUS BOIS	48,934231	2,499789	Île-de-France	France	17 Rue Henri Becquerel, 93600 Aulnay-sous-Bois	48.9578	2.4939	—	clim et chauff
-Clim plus	clim+	COIGNIERES CLIM+	78000	Coignières	48,74639	1,91944	Île-de-France	France	6-8 Rue Marie Curie, 78310 Coignières	48.7444	1.9210	—	clim et chauff
+Clim plus	clim+	VILLENEUVE CLIM+	92000	Villeneuve-la-Garenne	48,93472	2,32861	Île-de-France	France	4 Rue de la Litte, 92390 Villeneuve-la-Garenne	48.9407	2.3156	—	Fournitures
+Clim plus	clim+	NANTERRE CLIM+	92000	Nanterre	48,89056	2,20889	Île-de-France	France	16 Avenue des Guilleraies, 92000 Nanterre	48.9053	2.2109	—	Fournitures
+Clim plus	clim+	AULNAY SOUS BOIS CLIM+	93000	AULNAY SOUS BOIS	48,934231	2,499789	Île-de-France	France	17 Rue Henri Becquerel, 93600 Aulnay-sous-Bois	48.9578	2.4939	—	Fournitures
+Clim plus	clim+	COIGNIERES CLIM+	78000	Coignières	48,74639	1,91944	Île-de-France	France	6-8 Rue Marie Curie, 78310 Coignières	48.7444	1.9210	—	Fournitures
 			75000	Paris  	48,8608	2,3458	Île-de-France	France					
 			75000	Paris  	48,8719	2,3574	Île-de-France	France					
 			75000	Paris  	48,85846	2,37959	Île-de-France	France					
