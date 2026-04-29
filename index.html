@@ -15,28 +15,12 @@
         .range-box { background: #eef2f3; padding: 8px 15px; border-radius: 6px; border: 1px solid #ddd; display: flex; align-items: center; gap: 10px; }
         
         .legend { 
-            background: white; 
-            padding: 10px; 
-            border-radius: 8px; 
-            box-shadow: 0 0 5px rgba(0,0,0,0.3); 
-            line-height: 22px; 
-            max-height: 500px; 
-            overflow-y: auto; 
-            width: 260px; 
-            font-size: 11px;
+            background: white; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.3); 
+            line-height: 22px; max-height: 500px; overflow-y: auto; width: 260px; font-size: 11px;
         }
-        /* MODIFICATION : Titre G1 et G2 en rouge */
-        .legend b.title { 
-            font-size: 12px; 
-            display: block; 
-            margin-bottom: 8px; 
-            border-bottom: 2px solid #eee; 
-            color: red; 
-            line-height: 1.4; 
-        }
+        .legend b.title { font-size: 12px; display: block; margin-bottom: 8px; border-bottom: 2px solid #eee; color: red; line-height: 1.4; }
         .legend span { cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 3px 5px; border-radius: 3px; font-weight: bold; }
         .legend span:hover { background: #f0f0f0; }
-
         .legend-logo { width: 20px; height: 20px; object-fit: contain; border-radius: 2px; background: white; border: 1px solid #f0f0f0; }
         .legend-color-box { display: inline-block; width: 16px; height: 16px; border-radius: 3px; border: 1px solid #999; }
     </style>
@@ -70,9 +54,6 @@
 <script>
 var map = L.map('map').setView([48.85, 2.35], 9);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-var boundsIdF = [[48.12, 1.44], [49.24, 3.56]];
-L.rectangle(boundsIdF, {color: "#000000", weight: 2, fill: false, interactive: false}).addTo(map);
 
 var markers = [];
 var villesCoords = {};
@@ -112,13 +93,14 @@ var logosMap = {
     "ATPL CASELAS": "ATPL CASELAS .png"
 };
 
-var leafletIconMap = {
-    "#003399": "blue", "#cc0000": "red", "#006600": "green", "#000000": "black",
-    "#424949": "grey", "#7d3c98": "violet", "#af601a": "orange", "#7e5109": "yellow",
-    "#1a5276": "blue", "#922b21": "red", "#1d8348": "green", "#212f3d": "black"
-};
+function isValueValid(val) {
+    if (!val) return false;
+    let v = val.toString().trim();
+    return v !== "" && v !== "-" && v !== "null";
+}
 
 function getIcon(hex) {
+    let leafletIconMap = {"#003399": "blue", "#cc0000": "red", "#006600": "green", "#000000": "black", "#1a5276": "blue"};
     let colorName = leafletIconMap[hex] || "blue";
     return new L.Icon({
         iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${colorName}.png`,
@@ -152,47 +134,44 @@ fetch("data.csv")
                     let latV = parseFloat(row["Latitude ville"]?.replace(",", "."));
                     let lngV = parseFloat(row["Longitude ville"]?.replace(",", "."));
 
-                    if (isNaN(latF)) return;
-
                     let f = row["fournisseur"]?.trim();
                     let v = row["ville"]?.trim();
                     let cp = row["CP"]?.trim();
                     let p = row["Produit"]?.trim() || row["Produit "]?.trim();
 
-                    if (f) frsSet.add(f);
-                    if (v) {
+                    // 1. Enrichissement Ville (Toujours fait si ville + coordonnées ville existent)
+                    if (isValueValid(v)) {
                         villeSet.add(v);
                         if (!isNaN(latV)) villesCoords[normalize(v)] = [latV, lngV];
                     }
-                    if (cp) cpSet.add(cp);
-                    if (p) prodSet.add(p);
+
+                    // 2. SÉCURITÉ MARQUEURS : Uniquement si Fournisseur ET Coordonnées fournisseur existent
+                    if (!isValueValid(f) || isNaN(latF) || isNaN(lngF)) return;
+
+                    // 3. Enrichissement des autres listes (uniquement pour les vrais fournisseurs)
+                    frsSet.add(f);
+                    if (isValueValid(cp)) cpSet.add(cp);
+                    if (isValueValid(p)) prodSet.add(p);
 
                     let hex = codesCouleurs[f] || "#1f77b4";
-                    
-                    let popupContent = `
-                        <div style="line-height:1.6;">
-                            <b>Fournisseur :</b> ${f}<br>
-                            <b>Adresse :</b> ${row["adresse complete"] || ""}<br>
-                            <b>CP :</b> ${cp}<br>
-                            <b>Ville :</b> ${v}<br>
-                            <b>Région :</b> ${row["region"] || ""}<br>
-                            <b>Pays :</b> ${row["Pays"] || ""}<br>
-                            <b>Produit :</b> ${p}<br>
-                            <b>Email :</b> <a href="mailto:${row["Email"]}">${row["Email"] || ""}</a>
-                        </div>`;
+                    let popupContent = `<div style="line-height:1.6;">
+                        <b>Fournisseur :</b> ${f}<br>
+                        <b>Adresse :</b> ${row["adresse complete"] || ""}<br>
+                        <b>Ville :</b> ${v} (${cp})<br>
+                        <b>Produit :</b> ${p}<br>
+                        <b>Email :</b> <a href="mailto:${row["Email"]}">${row["Email"] || ""}</a>
+                    </div>`;
 
-                    let m = L.marker([latF, lngF], { icon: getIcon(hex) })
-                             .bindPopup(popupContent);
-                    
+                    let m = L.marker([latF, lngF], { icon: getIcon(hex) }).bindPopup(popupContent);
                     m.data = { f, v, cp, p, lat: latF, lng: lngF };
                     m.addTo(map);
                     markers.push(m);
                 });
+
                 remplirSelect("filtreNom", frsSet, "Fournisseur");
                 remplirSelect("filtreVille", villeSet, "Ville");
                 remplirSelect("filtreCP", cpSet, "CP");
                 remplirSelect("filtreProduit", prodSet, "Produit");
-                
                 ajouterLegendes();
             }
         });
@@ -202,34 +181,20 @@ function remplirSelect(id, set, label) {
     let s = document.getElementById(id);
     s.innerHTML = `<option value="">${label} : Tous</option>`;
     Array.from(set).sort().forEach(v => {
-        let o = document.createElement("option"); o.value = v; o.textContent = v;
-        s.appendChild(o);
+        if (isValueValid(v)) {
+            let o = document.createElement("option"); o.value = v; o.textContent = v;
+            s.appendChild(o);
+        }
     });
 }
 
 function ajouterLegendes() {
-    var listeG2 = [
-        "Point P", "Raboni", "CAUPAMAT CADENZ", "Tersen", "pum", "YPREMA", 
-        "Fransbonhomme", "SODEXTRA", "SPME", "Bouvelot TP", "SNB", 
-        "EVA INDUSTRIES", "LM DISTRIBUTION", "IDF MARQUAGE", "EUROPIERRE"
-    ];
-
-    var listeG1 = [
-        "Loxam", "Cemex", "BSM", "COLBER", "SOL 78", "VIACOV", 
-        "CHEUTIN", "GO POMPE", "EVO LOCATION", "UTD", 
-        "SCIABBARRASI RENT", "RFM", "ATPL CASELAS"
-    ];
+    var listeG2 = ["Point P", "Raboni", "CAUPAMAT CADENZ", "Tersen", "pum", "YPREMA", "Fransbonhomme", "SODEXTRA", "SPME", "Bouvelot TP", "SNB", "EVA INDUSTRIES", "LM DISTRIBUTION", "IDF MARQUAGE", "EUROPIERRE"];
+    var listeG1 = ["Loxam", "Cemex", "BSM", "COLBER", "SOL 78", "VIACOV", "CHEUTIN", "GO POMPE", "EVO LOCATION", "UTD", "SCIABBARRASI RENT", "RFM", "ATPL CASELAS"];
     
     function createLegendItem(f) {
         var span = document.createElement("span");
-        let iconHtml = "";
-        
-        if (logosMap[f]) {
-            iconHtml = `<img src="${logosMap[f]}" class="legend-logo" onerror="this.outerHTML='<div class=\'legend-color-box\' style=\'background:${codesCouleurs[f]}\'></div>'">`;
-        } else {
-            iconHtml = `<div class="legend-color-box" style="background:${codesCouleurs[f] || '#ccc'}"></div>`;
-        }
-
+        let iconHtml = logosMap[f] ? `<img src="${logosMap[f]}" class="legend-logo" onerror="this.outerHTML='<div class=\'legend-color-box\' style=\'background:${codesCouleurs[f]}\'></div>'">` : `<div class="legend-color-box" style="background:${codesCouleurs[f] || '#ccc'}"></div>`;
         span.innerHTML = `${iconHtml} ${f}`;
         span.onclick = () => { document.getElementById("filtreNom").value = f; filtrer(); };
         return span;
@@ -238,10 +203,8 @@ function ajouterLegendes() {
     var legendLeft = L.control({position: 'bottomleft'});
     legendLeft.onAdd = function() {
         var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `<b class="title">G2 : Fournitures / Marquage / Balisage / Matériel</b>`;
-        listeG2.sort().forEach(f => {
-            if (codesCouleurs[f]) div.appendChild(createLegendItem(f));
-        });
+        div.innerHTML = `<b class="title">G2 : Fournitures / Matériel</b>`;
+        listeG2.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
         return div;
     };
     legendLeft.addTo(map);
@@ -249,10 +212,8 @@ function ajouterLegendes() {
     var legendRight = L.control({position: 'bottomright'});
     legendRight.onAdd = function() {
         var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `<b class="title">G1 : Engins grands / petits & Recyclage</b>`;
-        listeG1.sort().forEach(f => {
-            if (codesCouleurs[f]) div.appendChild(createLegendItem(f));
-        });
+        div.innerHTML = `<b class="title">G1 : Engins & Recyclage</b>`;
+        listeG1.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
         return div;
     };
     legendRight.addTo(map);
@@ -279,7 +240,6 @@ function filtrer() {
         if (nom && normalize(d.f) !== nom) match = false;
         if (cp && normalize(d.cp) !== cp) match = false;
         if (prod && normalize(d.p) !== prod) match = false;
-
         if (centre) {
             let dist = getDistance(centre[0], centre[1], d.lat, d.lng);
             if (normalize(d.v) !== ville && dist > rayon) match = false;
