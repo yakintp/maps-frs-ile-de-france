@@ -66,7 +66,7 @@ var cercleRayon = null;
 // Palette diversifiée avec ajouts Clim plus et LARIVIERE
 var codesCouleurs = {
     "ATPL CASELAS": "blue", "BSM": "red", "Bouvelot TP": "green", 
-    "CAUPAMAT CADDENZ": "violet", "CHEUTIN": "orange", "COLBER": "black",
+    "CAUPAMAT CADENZ": "violet", "CHEUTIN": "orange", "COLBER": "black",
     "EVA INDUSTRIES": "red", "EUROPIERRE": "blue", "EVO LOCATION": "green",
     "Fransbonhomme": "violet", "GO POMPE": "orange", "IDF MARQUAGE": "black",
     "Loxam": "blue", "LM DISTRIBUTION": "red", "Point P": "red",
@@ -97,8 +97,8 @@ var logosMap = {
     "IDF MARQUAGE": "IDF MARQUAGE.jpg",
     "EUROPIERRE": "EUROPIERRE.jpg",
     "ATPL CASELAS": "ATPL CASELAS .png",
-    "Clim plus": "https://assets.pyc.fr/uploads/media/image/0001/73/thumb_72064_image_article_photo.png",
-    "LARIVIERE": "https://img.batiweb.com/repo-images/supplier/3422/400_300/lariviere-logo.webp"
+    "Clim plus": "https://assets.pyc.fr/uploads/media/image/0001/73/thumb_72064_image_article_photo.png", // À vérifier si vous avez le fichier
+    "LARIVIERE": "https://img.batiweb.com/repo-images/supplier/3422/400_300/lariviere-logo.webp"   // À vérifier si vous avez le fichier
 };
 
 function isValueValid(val) {
@@ -143,4 +143,116 @@ fetch("data.csv")
                     let f = row["fournisseur"]?.trim();
                     let v = row["ville"]?.trim();
                     let cp = row["CP"]?.trim();
-                    let p
+                    let p = row["Produit"]?.trim() || row["Produit "]?.trim();
+
+                    if (isValueValid(v)) {
+                        villeSet.add(v);
+                        if (!isNaN(latV)) villesCoords[normalize(v)] = [latV, lngV];
+                    }
+
+                    if (!isValueValid(f) || isNaN(latF) || isNaN(lngF)) return;
+
+                    frsSet.add(f);
+                    if (isValueValid(cp)) cpSet.add(cp);
+                    if (isValueValid(p)) prodSet.add(p);
+
+                    let color = codesCouleurs[f] || "blue";
+                    let popupContent = `<div style="line-height:1.6;">
+                        <b>Fournisseur :</b> ${f}<br>
+                        <b>Adresse :</b> ${row["adresse complete"] || ""}<br>
+                        <b>Ville :</b> ${v} (${cp})<br>
+                        <b>Produit :</b> ${p}<br>
+                        <b>Email :</b> <a href="mailto:${row["Email"]}">${row["Email"] || ""}</a>
+                    </div>`;
+
+                    let m = L.marker([latF, lngF], { icon: getIcon(color) }).bindPopup(popupContent);
+                    m.data = { f, v, cp, p, lat: latF, lng: lngF };
+                    m.addTo(map);
+                    markers.push(m);
+                });
+
+                remplirSelect("filtreNom", frsSet, "Fournisseur");
+                remplirSelect("filtreVille", villeSet, "Ville");
+                remplirSelect("filtreCP", cpSet, "CP");
+                remplirSelect("filtreProduit", prodSet, "Produit");
+                ajouterLegendes();
+            }
+        });
+    });
+
+function remplirSelect(id, set, label) {
+    let s = document.getElementById(id);
+    s.innerHTML = `<option value="">${label} : Tous</option>`;
+    Array.from(set).sort().forEach(v => {
+        if (isValueValid(v)) {
+            let o = document.createElement("option"); o.value = v; o.textContent = v;
+            s.appendChild(o);
+        }
+    });
+}
+
+function ajouterLegendes() {
+    // AJOUT DE CLIM PLUS ET LARIVIERE DANS CETTE LISTE
+    var listeG2 = ["Point P", "Raboni", "CAUPAMAT CADENZ", "Tersen", "pum", "YPREMA", "Fransbonhomme", "SODEXTRA", "SPME", "Bouvelot TP", "SNB", "EVA INDUSTRIES", "LM DISTRIBUTION", "IDF MARQUAGE", "EUROPIERRE", "Clim plus", "LARIVIERE"];
+    var listeG1 = ["Loxam", "Cemex", "BSM", "COLBER", "SOL 78", "VIACOV", "CHEUTIN", "GO POMPE", "EVO LOCATION", "UTD", "SCIABBARRASI RENT", "RFM", "ATPL CASELAS"];
+    
+    function createLegendItem(f) {
+        var span = document.createElement("span");
+        let iconHtml = logosMap[f] ? `<img src="${logosMap[f]}" class="legend-logo" onerror="this.outerHTML='<div class=\'legend-color-box\' style=\'background:${codesCouleurs[f]}\'></div>'">` : `<div class="legend-color-box" style="background:${codesCouleurs[f] || '#ccc'}"></div>`;
+        span.innerHTML = `${iconHtml} ${f}`;
+        span.onclick = () => { document.getElementById("filtreNom").value = f; filtrer(); };
+        return span;
+    }
+
+    var legendLeft = L.control({position: 'bottomleft'});
+    legendLeft.onAdd = function() {
+        var div = L.DomUtil.create('div', 'legend');
+        div.innerHTML = `<b class="title">G2 : Fournitures / Marquage / Balisage / Matériel</b>`;
+        listeG2.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
+        return div;
+    };
+    legendLeft.addTo(map);
+
+    var legendRight = L.control({position: 'bottomright'});
+    legendRight.onAdd = function() {
+        var div = L.DomUtil.create('div', 'legend');
+        div.innerHTML = `<b class="title">G1 : Engins grands / petits & Recyclage</b>`;
+        listeG1.sort().forEach(f => { if (codesCouleurs[f]) div.appendChild(createLegendItem(f)); });
+        return div;
+    };
+    legendRight.addTo(map);
+}
+
+function filtrer() {
+    let nom = normalize(document.getElementById("filtreNom").value);
+    let ville = normalize(document.getElementById("filtreVille").value);
+    let cp = normalize(document.getElementById("filtreCP").value);
+    let prod = normalize(document.getElementById("filtreProduit").value);
+    let rayon = parseFloat(document.getElementById("filtreRayon").value);
+
+    if (cercleRayon) map.removeLayer(cercleRayon);
+    let centre = (ville && villesCoords[ville]) ? villesCoords[ville] : null;
+
+    if (centre && rayon > 0) {
+        cercleRayon = L.circle(centre, { radius: rayon * 1000, color: '#333', fillOpacity: 0.1, weight: 1 }).addTo(map);
+        map.fitBounds(cercleRayon.getBounds());
+    }
+
+    markers.forEach(m => {
+        let d = m.data;
+        let match = true;
+        if (nom && normalize(d.f) !== nom) match = false;
+        if (cp && normalize(d.cp) !== cp) match = false;
+        if (prod && normalize(d.p) !== prod) match = false;
+        if (centre) {
+            let dist = getDistance(centre[0], centre[1], d.lat, d.lng);
+            if (normalize(d.v) !== ville && dist > rayon) match = false;
+        } else if (ville && normalize(d.v) !== ville) {
+            match = false;
+        }
+        if (match) m.addTo(map); else map.removeLayer(m);
+    });
+}
+</script>
+</body>
+</html>
